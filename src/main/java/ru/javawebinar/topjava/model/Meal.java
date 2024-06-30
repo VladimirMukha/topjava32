@@ -1,19 +1,26 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
+@NamedQueries({
+        @NamedQuery(name = "Delete.Meal", query = "DELETE  FROM Meal m where m.id=:id and m.user.id=:user_id"),
+        @NamedQuery(name = "Get.Between", query =
+                "SELECT m FROM Meal m where m.user.id=: user_id and m.dateTime BETWEEN  :startDate and :endDate")
+})
+@Entity()
+@Table(name = "meal")
 public class Meal extends AbstractBaseEntity {
+    @Column(name = "date_time")
     private LocalDateTime dateTime;
-
+    @Column(name = "description")
     private String description;
-
+    @Column(name = "calories")
     private int calories;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {
